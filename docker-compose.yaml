@@ -2,7 +2,7 @@ services:
   go-webhook-send:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: send.Dockerfile
     container_name: go-webhook-send
     ports:
       - "9001:8080"

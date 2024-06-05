@@ -11,10 +11,10 @@ RUN go mod download
 
 # Copy the source code. Note the slash at the end, as explained in
 # https://docs.docker.com/engine/reference/builder/#copy
-COPY *.go ./
+COPY . .
 
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o /go-webhook-send
+RUN make send-build-linux
 
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
 # But we can (optionally) document in the Dockerfile what ports
@@ -23,4 +23,4 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /go-webhook-send
 EXPOSE 8080
 
 # Run
-CMD [ "/go-webhook-send" ]
+CMD [ "./build/send" ]

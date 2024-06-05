@@ -12,14 +12,14 @@ help:
 	@echo "run: run the project"
 	@echo "test: run tests"
 
-build:	
-	RUN CGO_ENABLED=0 go build -o /go-webhook-send
+send-build:
+	CGO_ENABLED=0 go build -o ./build/send ./cmd/send
 
-build-linux:	
-	RUN CGO_ENABLED=0 GOOS=linux go build -o /go-webhook-send
+send-build-linux:
+	CGO_ENABLED=0 GOOS=linux go build -o ./build/send ./cmd/send
 
-clean:
-	rm -f /go-webhook-send
+send-clean:
+	rm -f ./build/send
 
 deps:
 	go mod tidy
