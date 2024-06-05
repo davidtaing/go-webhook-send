@@ -8,6 +8,7 @@ WORKDIR /app
 # Download Go modules
 # Temporary workaround whilst we don't have any dependencies.
 COPY go.mod ./
+
 ## Uncomment this when we have dependencies
 # COPY go.mod go.sum ./
 RUN go mod download
@@ -17,7 +18,7 @@ RUN go mod download
 COPY *.go ./
 
 # Build
-RUN make build-linux
+RUN CGO_ENABLED=0 GOOS=linux go build -o /go-webhook-send
 
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
 # But we can (optionally) document in the Dockerfile what ports
