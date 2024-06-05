@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: go-webhook-send
     ports:
-      - "8080:8080"
+      - "8080:9001"
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq-server
