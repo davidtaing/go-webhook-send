@@ -1,25 +1,19 @@
 .PHONY: help
 
-help: 
+help:
 	@echo "Available commands:"
-	@echo "build: build the project"
-	@echo "build-linux: build the project for linux"
-	@echo "clean: remove binary"
 	@echo "deps: install dependencies"
 	@echo "docker-start: start docker-compose"
 	@echo "docker-stop: stop docker-compose"
 	@echo "lint: run linter"
 	@echo "run: run the project"
+	@echo "receive-build: build receive server"
+	@echo "receive-build-linux: build receive server for linux"
+	@echo "receive-clean: remove receive server binaries"
+	@echo "send-build: build send server"
+	@echo "send-build-linux: build send server for linux"
+	@echo "send-clean: remove send server binaries"
 	@echo "test: run tests"
-
-send-build:
-	CGO_ENABLED=0 go build -o ./build/send ./cmd/send
-
-send-build-linux:
-	CGO_ENABLED=0 GOOS=linux go build -o ./build/send ./cmd/send
-
-send-clean:
-	rm -f ./build/send
 
 deps:
 	go mod tidy
@@ -35,6 +29,24 @@ lint:
 
 run:
 	go run main.go
+
+receive-build:
+	CGO_ENABLED=0 go build -o ./build/receive ./cmd/receive
+
+receive-build-linux:
+	CGO_ENABLED=0 GOOS=linux go build -o ./build/receive ./cmd/receive
+
+receive-clean:
+	rm -f ./build/receive
+
+send-build:
+	CGO_ENABLED=0 go build -o ./build/send ./cmd/send
+
+send-build-linux:
+	CGO_ENABLED=0 GOOS=linux go build -o ./build/send ./cmd/send
+
+send-clean:
+	rm -f ./build/send
 
 test:
 	go test ./...

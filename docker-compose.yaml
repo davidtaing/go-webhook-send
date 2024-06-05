@@ -1,4 +1,11 @@
 services:
+  go-webhook-receive:
+    build:
+      context: ./
+      dockerfile: receive.Dockerfile
+    container_name: go-webhook-receive
+    ports:
+      - "9101:8080"
   go-webhook-send:
     build:
       context: ./
