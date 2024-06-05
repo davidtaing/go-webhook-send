@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build
-RUN make send-build-linux
+RUN make receive-build-linux
 
 # To bind to a TCP port, runtime parameters must be supplied to the docker command.
 # But we can (optionally) document in the Dockerfile what ports
@@ -23,4 +23,4 @@ RUN make send-build-linux
 EXPOSE 8080
 
 # Run
-CMD [ "./build/send" ]
+CMD [ "./build/receive" ]
