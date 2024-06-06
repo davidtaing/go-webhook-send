@@ -11,7 +11,8 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.22.x"
-      - run: go test ./tests -v
+      - name: Run tests
+        run: make test
       # - name: Install dependencies
       #   run: make deps
       # - name: Build Send Server
