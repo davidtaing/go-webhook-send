@@ -49,4 +49,5 @@ send-clean:
 	rm -f ./build/send
 
 test:
-	go test ./...
+	@echo "Testing..."
+	@go test ./tests -v

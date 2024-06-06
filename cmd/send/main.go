@@ -1,24 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"log"
-	"net/http"
 
-	"github.com/gorilla/mux"
+	server "github.com/davidtaing/go-webhook-send/internal/send-server"
 )
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/hello", handleHelloWorld)
+	s := server.NewServer()
 
 	log.Println("Hello server started on :8080")
 
-	err := http.ListenAndServe(":8080", r)
+	err := s.ListenAndServe()
 	if err != nil {
-		log.Fatal(err)
+		panic(fmt.Sprintf("cannot start server: %s", err))
 	}
-}
-
-func handleHelloWorld(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello, World!"))
 }
