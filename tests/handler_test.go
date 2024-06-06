@@ -6,12 +6,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	server "github.com/davidtaing/go-webhook-send/internal/send-server"
+	sendserver "github.com/davidtaing/go-webhook-send/internal/send-server"
 )
 
 func TestHandler(t *testing.T) {
-	s := &server.Server{}
-	server := httptest.NewServer(http.HandlerFunc(s.HelloWorldHandler))
+	rh := &sendserver.RouteHandler{}
+	server := httptest.NewServer(http.HandlerFunc(rh.MakeHTTPHandler(rh.HelloWorldHandler)))
 	defer server.Close()
 	resp, err := http.Get(server.URL)
 	if err != nil {
@@ -22,7 +22,7 @@ func TestHandler(t *testing.T) {
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("expected status OK; got %v", resp.Status)
 	}
-	expected := "{\"message\":\"Hello World\"}"
+	expected := "{\"message\":\"Hello World\"}\n"
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatalf("error reading response body. Err: %v", err)

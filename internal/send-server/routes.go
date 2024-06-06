@@ -1,29 +1,14 @@
 package server
 
 import (
-	"encoding/json"
-	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/davidtaing/go-webhook-send/internal/server"
 )
 
-func (s *Server) RegisterRoutes() http.Handler {
-	r := mux.NewRouter()
-
-	r.HandleFunc("/", s.HelloWorldHandler)
-
-	return r
-}
-
-func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
+func (rh *RouteHandler) HelloWorldHandler(w http.ResponseWriter, r *http.Request) error {
 	resp := make(map[string]string)
 	resp["message"] = "Hello World"
 
-	jsonResp, err := json.Marshal(resp)
-	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
-	}
-
-	_, _ = w.Write(jsonResp)
+	return server.WriteJSON(w, http.StatusOK, resp)
 }
