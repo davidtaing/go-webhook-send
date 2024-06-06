@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	server "github.com/davidtaing/go-webhook-send/internal/receive-server"
+	server "github.com/davidtaing/go-webhook-send/internal/receiveserver"
 )
 
 func main() {

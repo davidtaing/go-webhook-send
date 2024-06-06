@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	sendserver "github.com/davidtaing/go-webhook-send/internal/send-server"
+	sendserver "github.com/davidtaing/go-webhook-send/internal/sendserver"
 )
 
 func TestHandler(t *testing.T) {
