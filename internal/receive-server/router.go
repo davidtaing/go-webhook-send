@@ -15,6 +15,7 @@ func (rh *RouteHandler) RegisterRoutes() http.Handler {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", server.MakeHTTPHandler(rh.HelloWorldHandler))
+	r.HandleFunc("/receive", server.MakeHTTPHandler(rh.Receive))
 
 	return r
 }
