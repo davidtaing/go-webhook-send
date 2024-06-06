@@ -13,8 +13,14 @@ func TestNewSignatureValidSignature(t *testing.T) {
 		"hello": "world",
 	}
 
+	buf, err := payload.ToBuffer()
+
+	if err != nil {
+		t.Fatalf("error creating signature. Err: %v", err)
+	}
+
 	want := "VswE8kWdwK-wh9tYr2ZZ33LH2oejS2JgCb55YvAKc3Q"
-	signature, err := webhook.NewSignature(payload, secret)
+	signature, err := webhook.NewSignature(buf.Bytes(), secret)
 
 	if err != nil {
 		t.Fatalf("error creating signature. Err: %v", err)
@@ -31,18 +37,20 @@ func TestNewSignatureDifferentSignaturesForDifferentPayloads(t *testing.T) {
 	payload1 := webhook.Payload{
 		"hello": "world",
 	}
-
 	payload2 := webhook.Payload{
 		"hellos": "world",
 	}
 
-	sig1, err := webhook.NewSignature(payload1, secret)
+	buf1, _ := payload1.ToBuffer()
+	buf2, _ := payload2.ToBuffer()
+
+	sig1, err := webhook.NewSignature(buf1.Bytes(), secret)
 
 	if err != nil {
 		t.Fatalf("error creating signature from payload 1. Err: %v", err)
 	}
 
-	sig2, err := webhook.NewSignature(payload2, secret)
+	sig2, err := webhook.NewSignature(buf2.Bytes(), secret)
 
 	if err != nil {
 		t.Fatalf("error creating signature from payload 2. Err: %v", err)

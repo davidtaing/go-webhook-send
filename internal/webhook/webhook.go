@@ -1,12 +1,26 @@
 package webhook
 
 import (
+	"bytes"
+	"encoding/json"
+
 	"github.com/oklog/ulid/v2"
 )
 
 const secret = "secret"
 
 type Payload map[string]interface{}
+
+func (p *Payload) ToBuffer() (*bytes.Buffer, error) {
+	buf := bytes.Buffer{}
+	err := json.NewEncoder(&buf).Encode(p)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &buf, nil
+}
 
 type example_payload struct {
 	Scope     string `json:"scope"`

@@ -1,25 +1,30 @@
 package webhook
 
 import (
-	"bytes"
-	"encoding/json"
 	"net/http"
 )
 
-func BuildRequest(url string, payload Payload) (*http.Request, error) {
-	p := bytes.Buffer{}
-	err := json.NewEncoder(&p).Encode(payload)
+func BuildRequest(url string, p Payload) (*http.Request, error) {
+	// buffer for our http request body
+	bodyBuf, err := p.ToBuffer()
 
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPost, url, &p)
+	req, err := http.NewRequest(http.MethodPost, url, bodyBuf)
 	if err != nil {
 		return nil, err
 	}
 
-	signature, err := NewSignature(payload, secret)
+	// buffer for generating signatures
+	sigBuf, err := p.ToBuffer()
+
+	if err != nil {
+		return nil, err
+	}
+
+	signature, err := NewSignature(sigBuf.Bytes(), secret)
 	if err != nil {
 		return nil, err
 	}
