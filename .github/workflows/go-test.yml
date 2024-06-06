@@ -11,13 +11,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.22.x"
+      - name: Build Receive Server
+        run: make receive-server
+      - name: Build Send Server
+        run: make send-server
       - name: Run tests
         run: make test
-      # - name: Install dependencies
-      #   run: make deps
-      # - name: Build Send Server
-      #   run: CGO_ENABLED=0 go build -o ./build/send ./cmd/send
-      # - name: Build Receive Server
-      #   run: CGO_ENABLED=0 go build -o ./build/receive ./cmd/receive
-      # - name: Test with the Go CLI
-      #   run: make test
