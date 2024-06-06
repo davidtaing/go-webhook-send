@@ -1,12 +1,13 @@
 package tests
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/davidtaing/go-webhook-send/internal/webhook"
 )
 
-func TestNewSignatureValidSignature(t *testing.T) {
+func TestNewSignature(t *testing.T) {
 	const secret = "secret"
 
 	payload := webhook.Payload{
@@ -31,18 +32,18 @@ func TestNewSignatureValidSignature(t *testing.T) {
 	}
 }
 
-func TestNewSignatureDifferentSignaturesForDifferentPayloads(t *testing.T) {
+func TestNewSignatureWithDifferentPayloads(t *testing.T) {
 	const secret = "secret"
 
-	payload1 := webhook.Payload{
+	p1 := webhook.Payload{
 		"hello": "world",
 	}
-	payload2 := webhook.Payload{
+	p2 := webhook.Payload{
 		"hellos": "world",
 	}
 
-	buf1, _ := payload1.ToBuffer()
-	buf2, _ := payload2.ToBuffer()
+	buf1, _ := p1.ToBuffer()
+	buf2, _ := p2.ToBuffer()
 
 	sig1, err := webhook.NewSignature(buf1.Bytes(), secret)
 
@@ -57,6 +58,33 @@ func TestNewSignatureDifferentSignaturesForDifferentPayloads(t *testing.T) {
 	}
 
 	if sig1 == sig2 {
-		t.Errorf("expected signature to be different for different payloads; \n payload1: %s\n, sig1: %s\n, payload2: %s\n, sig2: %s", payload1, payload2, sig1, sig2)
+		t.Errorf("expected different signatures for different payloads; \n payload1: %s\n, sig1: %s\n, payload2: %s\n, sig2: %s", p1, p2, sig1, sig2)
+	}
+}
+
+func TestNewSignatureWithReorderedKeys(t *testing.T) {
+	const secret = "secret"
+
+	// Maps will reorder the key/value pairs, so we're using raw JSON strings
+	payload1 := "{\"hello\":\"hello\", \"world\":\"world\"}"
+	payload2 := "{\"world\":\"world\", \"hello\":\"hello\"}"
+
+	buf1 := bytes.NewBufferString(payload1)
+	buf2 := bytes.NewBufferString(payload2)
+
+	sig1, err := webhook.NewSignature(buf1.Bytes(), secret)
+
+	if err != nil {
+		t.Fatalf("error creating signature from payload 1. Err: %v", err)
+	}
+
+	sig2, err := webhook.NewSignature(buf2.Bytes(), secret)
+
+	if err != nil {
+		t.Fatalf("error creating signature from payload 2. Err: %v", err)
+	}
+
+	if sig1 == sig2 {
+		t.Errorf("expected different signatures when reordered keys are reordered; \n payload1: %s\n, sig1: %s\n, payload2: %s\n, sig2: %s", payload1, payload2, sig1, sig2)
 	}
 }
